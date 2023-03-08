@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { validatePayCard } from "../utils/validate";
 import { useSelector } from "react-redux";
 
-const BACK = process.env.REACT_APP_BACK;
+const BACK = "http://localhost:3001"
 
 export default function OffCanvasCart(props) {
   const { show, setShow, setShowAlert, products } = props;

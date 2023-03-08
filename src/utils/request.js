@@ -1,7 +1,7 @@
 
 
 
-const BACK = process.env.REACT_APP_BACK
+const BACK = "http://localhost:3001"
 
 
 const getTests = async (callback) => {
