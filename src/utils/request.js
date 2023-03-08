@@ -4,26 +4,26 @@
 const BACK = "http://localhost:3001"
 
 
-const getTests = async (callback) => {
+export const getTests = async (callback) => {
     fetch(`${BACK}/tests`)
         .then(response => response.json())
         .then(data => callback(data))
 }
 
-const getSamples = async (callback) => {
+export  const getSamples = async (callback) => {
     fetch(`${BACK}/samples`)
         .then(response => response.json())
         .then(data => callback(data))
 }
 
-const getCategories = async (callback) => {
+export const getCategories = async (callback) => {
     fetch(`${BACK}/categories`)
         .then(response => response.json())
         .then(data => callback(data))
 }
 
 
-const getOrders = async (callback, token) => {
+export const getOrders = async (callback, token) => {
 
     const options = {
         headers: {
@@ -36,4 +36,4 @@ const getOrders = async (callback, token) => {
       
 }
 
-module.exports = { getTests, getSamples, getCategories, getOrders}
+// module.exports = { getTests, getSamples, getCategories, getOrders}
