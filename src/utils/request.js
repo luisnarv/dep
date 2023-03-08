@@ -36,4 +36,10 @@ export const getOrders = async (callback, token) => {
       
 }
 
+export const getCovidTests = async (callback) => {
+    fetch(`${BACK}/covid`)
+        .then(response => response.json())
+        .then(data => callback(data))
+}
+
 // module.exports = { getTests, getSamples, getCategories, getOrders}
