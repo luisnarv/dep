@@ -149,12 +149,11 @@ export default function Cart() {
         </div>
       )}
       <div>
-        {" "}
         <OffCanvasCart
           show={show}
           setShow={setShow}
           setShowAlert={setShowAlert}
-          products={products}
+          cart={cart}
         />
       </div>
       <div style={{ position: "absolute", width: "100%" }}>

@@ -12,7 +12,8 @@ export default function Faq() {
         marginBottom: "2%",
       }}
     >
-      <div style={{ marginBottom: "2%" }}>
+      <h2>Preguntas Frecuentes:</h2>
+      <div style={{ marginTop: "2%", marginBottom: "2%" }}>
         <Accordion>
           <Accordion.Item eventKey="0">
             <Accordion.Header>

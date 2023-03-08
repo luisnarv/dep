@@ -7,7 +7,7 @@ import { ArrowReturnLeft} from 'react-bootstrap-icons'
 import Badge from 'react-bootstrap/esm/Badge'
 import { useNavigate } from "react-router-dom";
 
-const BACK = "http://localhost:3001"
+const BACK = process.env.REACT_APP_BACK
 
 export default function Detail() {
     const { id } = useParams()

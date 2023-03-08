@@ -1,29 +1,34 @@
 
 
 
-const BACK = "http://localhost:3001"
+const BACK = process.env.REACT_APP_BACK
 
 
-export const getTests = async (callback) => {
+const getTests = async (callback) => {
     fetch(`${BACK}/tests`)
         .then(response => response.json())
         .then(data => callback(data))
 }
+const getCovidTests = async (callback) => {
+    fetch(`${BACK}/covid`)
+        .then(response => response.json())
+        .then(data => callback(data))
+}
 
-export  const getSamples = async (callback) => {
+const getSamples = async (callback) => {
     fetch(`${BACK}/samples`)
         .then(response => response.json())
         .then(data => callback(data))
 }
 
-export const getCategories = async (callback) => {
+const getCategories = async (callback) => {
     fetch(`${BACK}/categories`)
         .then(response => response.json())
         .then(data => callback(data))
 }
 
 
-export const getOrders = async (callback, token) => {
+const getOrders = async (callback, token) => {
 
     const options = {
         headers: {
@@ -36,4 +41,4 @@ export const getOrders = async (callback, token) => {
       
 }
 
-// module.exports = { getTests, getSamples, getCategories, getOrders}
+module.exports = { getTests, getSamples, getCategories, getOrders, getCovidTests}

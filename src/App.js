@@ -16,6 +16,7 @@ import {
   getOrders,
   getSamples,
   getTests,
+  getCovidTests
 } from "./utils/request";
 import TestList from "./containers/TestList";
 import Quoter from "./components/Quoter";
@@ -23,6 +24,7 @@ import Results from "./components/Results";
 import Payments from "./components/Payments";
 import User from "./components/User";
 import Footer from "./components/Footer";
+import CovidTests from "./containers/CovidTests";
 
 
 export default function App() {
@@ -33,6 +35,7 @@ export default function App() {
 
 
   getTests((tests) => dispatch(loadTests(tests)));
+  getCovidTests((tests) => dispatch(loadTests(tests)));
   getSamples((samples) => dispatch(loadSamples(samples)));
   getCategories((categories) => dispatch(loadCategories(categories)));
 
@@ -57,6 +60,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/tests" element={<TestList />} />
+          <Route path="/covid" element={<CovidTests />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

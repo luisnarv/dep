@@ -16,7 +16,14 @@ export default function About() {
     { name: "Carlos Fabián Melgarejo Agudelo" },
   ];
   return (
-    <div>
+    <div
+      style={{
+        width: "95%",
+        margin: "auto",
+        marginTop: "2%",
+        marginBottom: "2%",
+      }}
+    >
       <h3>Acerca de nosotros:</h3>
       <div
         style={{
@@ -28,15 +35,21 @@ export default function About() {
           return (
             <Card
               style={{
-                width: "22rem",
+                width: "20rem",
                 margin: "auto",
-                marginTop: "20px",
-                marginBottom: "20px",
+                marginTop: "2%",
+                marginBottom: "2%",
               }}
             >
               <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
               <Card.Body>
-                <Card.Title>{e.name}</Card.Title>
+                <Card.Title
+                  style={{
+                    fontSize: "19px",
+                  }}
+                >
+                  {e.name}
+                </Card.Title>
               </Card.Body>
               <ListGroup className="list-group-flush">
                 <ListGroup.Item>

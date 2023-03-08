@@ -47,7 +47,7 @@ export default function Footer() {
                             <Link to='/results' className="text-reset">Resultados</Link>
                         </li>  
                         <li>
-                            <Link to='/quoter' className="text-reset">Prubas Covid</Link>
+                            <Link to='/covid' className="text-reset">Pruebas Covid</Link>
                         </li>    
                     </ul>
                     <ul className="col-12 col-md-3 list-unstyled">

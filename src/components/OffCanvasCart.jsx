@@ -10,10 +10,10 @@ import React, { useState } from "react";
 import { validatePayCard } from "../utils/validate";
 import { useSelector } from "react-redux";
 
-const BACK = "http://localhost:3001"
+const BACK = process.env.REACT_APP_BACK;
 
 export default function OffCanvasCart(props) {
-  const { show, setShow, setShowAlert, products } = props;
+  const { show, setShow, setShowAlert, cart } = props;
   const handleClose = () => setShow(false);
   const token = useSelector((state) => state.sessionId?.token);
   const [creditCard, setCreditCard] = useState({
@@ -88,8 +88,8 @@ export default function OffCanvasCart(props) {
 
   const hasErrors = Object.values(errorsCreditCard).some(
     (value) => value !== ""
-  );
-  const hasValues = Object.values(creditCard).some((value) => value === "");
+  ); // Verificar si hay algún valor en el objeto errores (algún error en los datos introducidos)
+  const hasValues = Object.values(creditCard).some((value) => value === ""); // Verificar si hay algún input vacío
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -100,17 +100,21 @@ export default function OffCanvasCart(props) {
       alert("Debe completar los campos correctamente.");
       return;
     } else {
-      const cartToBack = {
-        tests: products,
-      };
-      const config = {
-        headers: { Authorization: `Bearer ${token}` },
-      };
-      // Se Comenta Para Evitar Que Falle (falta ruta back)
-      // await axios.post(`${BACK}/orders`, cartToBack, config);
-      handleClose();
-      setShowAlert(true);
+      try {
+        const config = {
+          headers: { token: `${token}` }, // se envía el token por header
+        };
+        const data = {
+          tests: cart, // se envían los id de los productos agregados al carrito
+        };
+        await axios.post(`${BACK}/orders`, data, config);
+      } catch (error) {
+        console.log(error.response.data);
+      }
     }
+
+    handleClose();
+    setShowAlert(true);
   }
 
   const showErrors = function (e) {
