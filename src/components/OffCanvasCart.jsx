@@ -150,7 +150,7 @@ export default function OffCanvasCart(props) {
         </Offcanvas.Header>
         <Offcanvas.Body>
           Selecciona un método de pago:
-          <Accordion defaultActiveKey="0" flush>
+          <Accordion flush>
             <Accordion.Item eventKey="0">
               <Accordion.Header>Tarjeta de crédito</Accordion.Header>
               <Accordion.Body>
@@ -360,6 +360,12 @@ export default function OffCanvasCart(props) {
               <Accordion.Header>MercadoPago</Accordion.Header>
               <Accordion.Body>
                 <Button>CONTINUAR COMPRA MERCADOPAGO</Button>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="2">
+              <Accordion.Header>CryptoPago</Accordion.Header>
+              <Accordion.Body>
+                <Button>CONTINUAR COMPRA CRYPTOPAGO</Button>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>

@@ -9,6 +9,7 @@ import './index.css'
 // bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import './css/bootstrap.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(

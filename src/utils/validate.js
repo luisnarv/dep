@@ -1,5 +1,5 @@
 const regexUsername = /^[a-zA-Z0-9]+$/;
-const regexName = /^[a-zA-Z\s]+$/;
+const regexName = /^[\p{L}\s]+$/u;
 const regexEmail = /^\S+@\S+.\S+$/;
 const regexPassword = /^[\S\s]{6,}$/;
 const regexNumber = /^[0-9]+$/;
@@ -12,9 +12,9 @@ export function validateSignUp(inputs) {
   } else if (!regexUsername.test(inputs.username)) {
     errors.username =
       "Formato de nombre de usuario inválido, el nombre de usuario solo puede contener letras o números.";
-  } else if (inputs.username.length < 6 || inputs.username.length > 20) {
+  } else if (inputs.username.length < 4 || inputs.username.length > 25) {
     errors.username =
-      "El nombre de usuario debe tener entre 6 y 20 caracteres.";
+      "El nombre de usuario debe tener entre 4 y 25 caracteres.";
   }
 
   if (!inputs.email) {
@@ -102,9 +102,9 @@ export function validateLogin(inputs) {
   } else if (!regexUsername.test(inputs.username)) {
     errors.username =
       "Formato de nombre de usuario inválido, el nombre de usuario solo puede contener letras o números.";
-  } else if (inputs.username.length < 6 || inputs.username.length > 20) {
+  } else if (inputs.username.length < 4 || inputs.username.length > 25) {
     errors.username =
-      "El nombre de usuario debe tener entre 6 y 20 caracteres.";
+      "El nombre de usuario debe tener entre 4 y 25 caracteres.";
   }
 
   if (!inputs.password) {
