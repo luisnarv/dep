@@ -12,17 +12,16 @@ export default function Home() {
           <div>
             <Slides/>
           </div>
-            <hr/>
-            <QuoterContainer/>
-            <hr/>
-            <div style={{background: "aliceblue"}}>
+          <Row className="p-4"/>
+          <QuoterContainer/>
+          <Row className="p-4"/>
+          <div className='bg-light transition-fade'>
             <Row>
-            <h3 className='d-flex justify-content-center'style={{padding: 10, color: "navy"}}>Mas Vendidos</h3>
-            <p className='d-flex justify-content-center'style={{color: "navy"}}>Los favoritos de nuestros clientes.</p>
+            <h3 className='d-flex justify-content-center pt-2 text-info'>Mas Vendidos</h3>
             </Row>
-                <CarouselCards/>
-            </div>
-            <Row className="pt-4"/>
+            <CarouselCards/>
+          </div>
+          <Row className="p-4"/>
         </div>
     )
 }

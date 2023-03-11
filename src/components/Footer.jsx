@@ -7,7 +7,7 @@ export default function Footer() {
     return (
         <div>
       <div style={{background: "aliceblue"}}>
-        <footer className="text-info py-4">
+        <footer className="text-primary py-4">
             <div className="container">
                 <nav className="row">
                     <ul className="col-12 col-md-3 list-unstyled">
@@ -41,7 +41,7 @@ export default function Footer() {
                     <ul className="col-12 col-md-3 list-unstyled">
                         <li className="pb-2"><strong>Nuestros Servicios</strong></li>
                         <li>
-                            <Link to='/tests' className="text-reset">Analisis Clinicos</Link>
+                            <Link to='/quoter' className="text-reset">Analisis Clinicos</Link>
                         </li>
                         <li>
                             <Link to='/results' className="text-reset">Resultados</Link>

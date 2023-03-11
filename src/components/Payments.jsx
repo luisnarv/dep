@@ -1,81 +1,82 @@
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/esm/Button";
 
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import PaymentDetail from "./PaymentDetail";
+
+const BACK = process.env.REACT_APP_BACK;
 
 export default function Payments() {
   const tests = useSelector((state) => state.tests);
   const [payments, setPayments] = useState([]);
   const [detailData, setDetailData] = useState([]);
+  const [dateToDetail, setDateToDetail] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-
-  const data = [
-    {
-      id: "1",
-      PatientId: 797,
-      TestId: [419, 1, 2],
-      PaymentId: 1,
-      createdAt: "2023-03-04T22:27:53.318Z",
-      updatedAt: "2023-03-04T22:27:53.318Z",
-    },
-    {
-      id: "2",
-      PatientId: 797,
-      TestId: [119, 1, 23],
-      PaymentId: 2,
-      createdAt: "2023-03-04T22:27:53.318Z",
-      updatedAt: "2023-03-04T22:27:53.318Z",
-    },
-    {
-      id: "3",
-      PatientId: 797,
-      TestId: [149, 12, 2],
-      PaymentId: 3,
-      createdAt: "2023-03-04T22:27:53.318Z",
-      updatedAt: "2023-03-04T22:27:53.318Z",
-    },
-  ];
+  const token = useSelector((state) => state.sessionId?.token);
 
   useEffect(() => {
-    setPayments(data);
-  }, []);
+    async function fetchPayments() {
+      try {
+        const config = {
+          headers: { token: `${token}` }, // se envía el token por header
+        };
+        const response = await axios.get(`${BACK}/payments/patient`, config);
+        setPayments(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchPayments();
+  }, [token]);
 
-  function getTestNamesById(ids) {
+  function getTestNamesById(orders) {
     const testNames = [];
-    ids.forEach((id) => {
-      const test = tests.find((test) => test.id === id);
+    orders.forEach((e) => {
+      const test = tests.find((test) => {
+        return test.id === e.TestId;
+      });
       if (test) {
         testNames.push(test.name);
       }
     });
+
     return testNames;
   }
 
   function handleDetailData(e) {
     const { id } = e.target;
-    const dataPayments = payments.find((p) => p.id === id);
-    const dataTests = tests.filter((e) => payments.TestId?.includes(e.id));
+    const dataPayments = payments.find((p) => p.id === parseInt(id));
+    const dataTests = [];
+    dataPayments?.Orders.forEach((e) => {
+      const test = tests.find((test) => {
+        return test.id === e.TestId;
+      });
+      if (test) {
+        dataTests.push(test);
+      }
+    });
 
-    console.log(dataPayments);
-    console.log(dataTests);
+    setDetailData(dataTests);
+    setDateToDetail(dataPayments.createdAt);
     setShowAlert(true);
   }
 
   return (
     <div
       style={{
+        margin: "auto",
+        marginTop: "2%",
+        marginBottom: "2%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        width: "80%",
-        margin: "auto",
-        position: "relative",
+        width: "90%",
       }}
     >
       <h2>Pagos</h2>
-      <Table striped bordered hover size="sm">
+      <Table striped bordered hover size="sm" style={{ marginTop: "2%" }}>
         <thead>
           <tr>
             <th style={{ width: "10%" }}>Id de Pago</th>
@@ -93,14 +94,13 @@ export default function Payments() {
             payments.map((e, key) => {
               return (
                 <tr key={key}>
-                  <td>{e.PaymentId}</td>
-                  <td>{getTestNamesById(e.TestId).join(", ")}</td>
+                  <td style={{ display: "flex", justifyContent: "center" }}>
+                    {e.id}
+                  </td>
+                  <td>{getTestNamesById(e.Orders).join(", ")}</td>
                   <td>{e.createdAt.slice(0, 10)}</td>
-                  <td>
-                    <Button
-                      id={e.PaymentId}
-                      onClick={(e) => handleDetailData(e)}
-                    >
+                  <td style={{ display: "flex", justifyContent: "center" }}>
+                    <Button id={e.id} onClick={(e) => handleDetailData(e)}>
                       Detalles
                     </Button>
                   </td>
@@ -114,6 +114,7 @@ export default function Payments() {
         showAlert={showAlert}
         setShowAlert={setShowAlert}
         detailData={detailData}
+        dateToDetail={dateToDetail}
       />
     </div>
   );

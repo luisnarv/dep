@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { testsFilter, clearFilter, searchFilter } from "../reducer";
-import Navbar from 'react-bootstrap/Navbar'
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
 export default function SearchBar({ setCurrentPage }) {
   const dispatch = useDispatch();
@@ -29,45 +30,60 @@ export default function SearchBar({ setCurrentPage }) {
   };
 
   return (
-    <>
-      <Navbar>
-
-      <input
-        name="search"
-        placeholder="Encuentra tu test"
-        type="text"
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        marginTop: "2%",
+        marginBottom: "2%",
+        paddingLeft: "2%",
+        paddingRight: "2%",
+      }}
+    >
+      <div style={{ width: "40%" }}>
+        <Form.Label>Busca tus tests</Form.Label>
+        <Form.Control
+          name="search"
+          placeholder="Encuentra tu test"
+          type="text"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
         />
-      <label htmlFor="category">filtrar por Categoria: </label>
-    
-        <select
+      </div>
+
+      <div style={{ width: "20%" }}>
+        <Form.Label>filtrar por Categoria: </Form.Label>
+        <Form.Select
           id="category"
           name="category"
           value={category}
           onChange={(event) => setCategory(event.target.value)}
-          style={{ marginRight: 10 }}
         >
           <option></option>
           {categories.map((category, index) => (
             <option key={index}>{category}</option>
           ))}
-        </select>
-        <label htmlFor="sample" style={{ marginRight: 10 }}>filtrar por muestra: </label>
-        <select
+        </Form.Select>
+      </div>
+      <div style={{ width: "20%" }}>
+        <Form.Label>filtrar por muestra: </Form.Label>
+        <Form.Select
           id="sample"
           name="sample"
           value={sample}
           onChange={(event) => setSample(event.target.value)}
-          style={{ marginRight: 10 }}
         >
           <option></option>
           {samples.map((sample, index) => (
             <option key={index}>{sample}</option>
           ))}
-        </select>
-        <button onClick={onClear}>Borrar filtros</button>
-      </Navbar>
-    </>
+        </Form.Select>
+      </div>
+
+      <Button variant="secondary" onClick={onClear} style={{ width: "12%" }}>
+        Borrar filtros
+      </Button>
+    </div>
   );
 }

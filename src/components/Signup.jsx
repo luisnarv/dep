@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -18,9 +18,11 @@ import GoogleSignIn from "./GoogleSignIn";
 
 const BACK = process.env.REACT_APP_BACK;
 
-export default function Signup() {
+export default function Signup(props) {
+  const { setShowAlertLogin, fromCart } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   // Variable user para el Login
   const [user, setUser] = useState({
     username: "",
@@ -79,7 +81,7 @@ export default function Signup() {
   });
 
   const [selectedSex, setSelectedSex] = useState("");
-  const [selectedForm, setSelectedForm] = useState("signup");
+  const [selectedForm, setSelectedForm] = useState("login");
 
   // Ingresar los datos al objeto user y verificar errores
   const handleChange = (event) => {
@@ -137,15 +139,25 @@ export default function Signup() {
     } else if (hasErrors) {
       alert("Debe completar los datos correctamente");
     } else {
-      const response = await axios.post(`${BACK}/patients/login`, user);
-      const userData = {
-        name: response.data.name,
-        token: response.headers.token,
-      };
-      dispatch(setSessionId(userData));
-      setItem("sessionId", userData);
-      // devuelve al iniciar sesión al perfil del usuario con url modificada con parte de su usuario
-      navigate("/user");
+      try {
+        const response = await axios.post(`${BACK}/users/login`, user);
+        const userData = {
+          name: response.data.name,
+          token: response.headers.token,
+        };
+        dispatch(setSessionId(userData));
+        setItem("sessionId", userData);
+        // devuelve al iniciar sesión al perfil del usuario con url modificada con parte de su usuario
+        if (fromCart === true) {
+          setShowAlertLogin(false);
+          navigate("/cart");
+        } else {
+          navigate("/user");
+        }
+      } catch (error) {
+        const alertError = error.response.data?.msg;
+        alert(alertError);
+      }
     }
   };
 
@@ -156,8 +168,14 @@ export default function Signup() {
     } else if (hasErrorsSignUp) {
       alert("Debe completar los datos correctamente");
     } else {
-      await axios.post(`${BACK}/patients/signup`, userSignUp);
-      window.alert("Registro exitoso.");
+      try {
+        await axios.post(`${BACK}/users/signup`, userSignUp);
+        window.alert("Registro exitoso.");
+        setSelectedForm("login");
+      } catch (error) {
+        const alertError = error.response.data.errors[0]?.msg;
+        alert(alertError);
+      }
     }
   };
 
@@ -216,50 +234,94 @@ export default function Signup() {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <div style={{ margin: "2%" }}>
-        <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-          <ToggleButton
-            value={1}
-            id="tbg-radio-1"
-            name="signup"
-            onClick={(e) => handleSelect(e)}
-            variant="outline-primary"
+      {location.pathname === "/signup" ? (
+        <div style={{ margin: "2%" }}>
+          <ToggleButtonGroup
+            type="radio"
+            name="options"
+            defaultValue={1}
+            value={selectedForm === "login" ? 1 : 2}
           >
-            Registrarse
-          </ToggleButton>
-          <ToggleButton
-            value={2}
-            id="tbg-radio-2"
-            name="login"
-            onClick={(e) => handleSelect(e)}
-            variant="outline-primary"
-          >
-            Iniciar Sesión
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </div>
+            <ToggleButton
+              value={1}
+              id="tbg-radio-2"
+              name="login"
+              onClick={(e) => handleSelect(e)}
+              variant="outline-primary"
+            >
+              Iniciar Sesión
+            </ToggleButton>
+            <ToggleButton
+              value={2}
+              id="tbg-radio-1"
+              name="signup"
+              onClick={(e) => handleSelect(e)}
+              variant="outline-primary"
+            >
+              Registrarse
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+      ) : null}
 
       <div
         style={
           selectedForm === "signup"
+            ? location.pathname === "/signup"
+              ? {
+                  width: "80%",
+                  margin: "auto",
+                  backgroundColor: "white",
+                  padding: "2%",
+                  borderRadius: "20px",
+                  marginBottom: "2%",
+                  boxShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
+                  position: "relative",
+                }
+              : {
+                  width: "100%",
+                  margin: "auto",
+                  backgroundColor: "white",
+                  padding: "2%",
+                  borderRadius: "20px",
+                  marginBottom: "2%",
+                  position: "relative",
+                }
+            : location.pathname === "/signup"
             ? {
-                width: "80%",
-                margin: "auto",
-                backgroundColor: "white",
-                padding: "2%",
-                borderRadius: "20px",
-                marginBottom: "2%",
-              }
-            : {
                 width: "40%",
                 margin: "auto",
                 backgroundColor: "white",
                 padding: "2%",
                 borderRadius: "20px",
                 marginBottom: "2%",
+                boxShadow: "2px 2px 4px rgba(0, 0, 0, 1)",
+                position: "relative",
+              }
+            : {
+                width: "80%",
+                margin: "auto",
+                backgroundColor: "white",
+                padding: "2%",
+                borderRadius: "20px",
+                marginBottom: "2%",
+                position: "relative",
               }
         }
       >
+        {location.pathname === "/cart" ? (
+          selectedForm === "signup" ? (
+            <div style={{ position: "absolute", top: "10px", left: "10px" }}>
+              <Button
+                variant="outline-primary"
+                size="sm"
+                onClick={() => setSelectedForm("login")}
+              >
+                {"< Iniciar Sesión"}
+              </Button>
+            </div>
+          ) : null
+        ) : null}
         <Row
           style={
             selectedForm === "signup"
@@ -267,15 +329,26 @@ export default function Signup() {
               : { width: "70%", margin: "auto" }
           }
         >
-          <p>Regístrese con Google</p>
-          <GoogleSignIn />
+          {selectedForm === "signup" ? (
+            <p>Regístrese con Google</p>
+          ) : (
+            <p>Inicie Sesión con Google</p>
+          )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <GoogleSignIn />
+          </div>
         </Row>
         <Row>
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-around",
+              justifyContent: "space-evenly",
               marginTop: "2%",
               marginBottom: "2%",
             }}
@@ -526,11 +599,12 @@ export default function Signup() {
               </Form.Group>
             </Row>
             <Button
-              variant="primary"
+              variant="success"
               type="submit"
               onClick={(e) => {
                 showErrors(e);
               }}
+              style={{ width: "30%" }}
             >
               Registrarse
             </Button>
@@ -541,7 +615,10 @@ export default function Signup() {
             onSubmit={(e) => {
               handleSubmit(e);
             }}
-            style={{ width: "90%", margin: "auto" }}
+            style={{
+              width: "90%",
+              margin: "auto",
+            }}
           >
             <Form.Group className="mb-3">
               <Form.Label>Nombre de usuario</Form.Label>
@@ -557,7 +634,7 @@ export default function Signup() {
                 {user.touched.username ? errorsUser.username : null}
               </p>
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3" style={{ position: "relative" }}>
               <Form.Label>Contraseña</Form.Label>
               <Form.Control
                 name="password"
@@ -567,19 +644,59 @@ export default function Signup() {
                 type="password"
                 placeholder="Ingrese su contraseña"
               />
+              <div
+                style={{
+                  position: "absolute",
+                  fontSize: "12px",
+                  bottom: "-20px",
+                  right: "0px",
+                }}
+              >
+                <a href={"signup"}>¿Olvidaste tu contraseña?</a>
+              </div>
               <p style={{ color: "red", fontSize: "12px" }}>
                 {user.touched.password ? errorsUser.password : null}
               </p>
             </Form.Group>
+
             <Button
               variant="primary"
               type="submit"
               onClick={(e) => {
                 showErrors(e);
               }}
+              style={{ marginTop: "5%", width: "60%" }}
             >
-              Ingresar
+              Iniciar Sesión
             </Button>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                marginTop: "3%",
+                alignItems: "center",
+              }}
+            >
+              <div
+                style={{
+                  borderBottom: "1px solid grey",
+                  width: "90%",
+                  marginBottom: "2%",
+                }}
+              ></div>
+
+              <p>¿Aún no tienes cuenta?</p>
+              <Button
+                variant="success"
+                onClick={(e) => {
+                  setSelectedForm("signup");
+                }}
+                style={{ width: "40%" }}
+              >
+                Registrarse
+              </Button>
+            </div>
           </Form>
         ) : null}
       </div>

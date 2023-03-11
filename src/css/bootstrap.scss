@@ -1,0 +1,15 @@
+$primary: #5080FD;
+$secondary: #5CE1E6;
+$success: rgb(91, 192, 192);
+$info: rgb(25, 138, 176) ;
+$warning:  yellow;
+$danger: tomato;
+$light: rgb(255, 255, 255);
+$dark: black;
+
+
+$box-shadow-sm: 0 2px 20px gray;
+$card-border-radius: 35px;
+$badge-border-radius:  15px;
+
+@import "../../node_modules/bootstrap/scss/bootstrap";

@@ -1,6 +1,6 @@
-import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import Modal from "react-bootstrap/Modal";
 
 import React, { useRef } from "react";
 import jsPDF from "jspdf";
@@ -37,10 +37,18 @@ export default function BillCart(props) {
 
   return (
     <div>
-      <Alert show={showAlert} variant="success">
-        <Alert.Heading>¡Compra Exitosa!</Alert.Heading>
-        <p>
-          <p>Resúmen de Compra - Recibo</p>
+      <Modal
+        show={showAlert}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>¡Compra Exitosa!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
           <Table striped bordered hover ref={tableRef}>
             <thead>
               <tr>
@@ -77,17 +85,17 @@ export default function BillCart(props) {
               </tr>
             </tbody>
           </Table>
-        </p>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <Button onClick={handleDownload} variant="outline-success">
-            Descargar
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleDownload}>
+            Descargar Comprobante
           </Button>
-          <Button onClick={handleClose} variant="outline-success">
-            Cerrar
+
+          <Button variant="secondary" onClick={handleClose}>
+            Close
           </Button>
-        </div>
-      </Alert>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
